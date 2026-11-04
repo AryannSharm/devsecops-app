@@ -11,13 +11,37 @@ spec:
     metadata:
       labels:
         app: healthcare-app
+        access: portal
     spec:
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 101
+        seccompProfile:
+          type: RuntimeDefault
       containers:
       - name: app
         image: healthcare-app:IMAGE_TAG
         imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 80
+        - containerPort: 8080
+        env:
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: healthcare-secret
+              key: db-password
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: tmp
+        emptyDir: {}
 ---
 apiVersion: v1
 kind: Service
@@ -28,4 +52,4 @@ spec:
     app: healthcare-app
   ports:
   - port: 80
-    targetPort: 80
+    targetPort: 8080
