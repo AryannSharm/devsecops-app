@@ -10,7 +10,12 @@ pipeline {
       steps { checkout scm }
     }
     stage('Build image') {
-      steps { sh 'docker build -t $IMAGE:$TAG .' }
+      steps {
+        sh '''
+          sed -i "s/__BUILD__/$TAG/g" index.html
+          docker build -t $IMAGE:$TAG .
+        '''
+      }
     }
     stage('Security scan (Trivy gate)') {
       steps { sh 'trivy image --scanners vuln --exit-code 1 --severity HIGH,CRITICAL $IMAGE:$TAG' }
