@@ -1,10 +1,111 @@
 <!DOCTYPE html>
-<html>
-<head><title>Patient Portal (demo)</title>
-<style>body{background:#0f3d3e;color:#fff;font-family:Arial,sans-serif;text-align:center;padding-top:100px;}</style>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CareConnect Patient Portal (demo)</title>
+<style>
+:root{--deep:#0f3d3e;--teal:#14b8a6;--mint:#ccfbf1;--ink:#0f2a2b;--muted:#5b7475;--bg:#f2f7f7;--card:#fff;--ok:#15803d}
+*{box-sizing:border-box;margin:0}
+body{font-family:Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+header{background:var(--deep);color:#fff;display:flex;align-items:center;justify-content:space-between;padding:14px 5%}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.15em}
+nav a{color:#b6e3dd;text-decoration:none;margin:0 14px;font-size:.95em}
+nav a:hover{color:#fff}
+button{font:inherit;cursor:pointer;border:0;border-radius:8px;padding:10px 20px}
+.btn{background:var(--teal);color:#042f2e;font-weight:600}
+.btn.ghost{background:transparent;color:#fff;border:1px solid #5eead4}
+.hero{background:linear-gradient(135deg,var(--deep),#115e59);color:#fff;text-align:center;padding:70px 5% 90px}
+.hero h1{font-size:2.4em;margin-bottom:12px}
+.hero p{color:#b6e3dd;max-width:560px;margin:0 auto 26px}
+.hero button{margin:4px 6px}
+main{max-width:1000px;margin:-50px auto 0;padding:0 5% 20px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px}
+.card{background:var(--card);border-radius:14px;padding:22px;box-shadow:0 4px 14px rgba(15,61,62,.08)}
+.card h3{color:var(--deep);margin-bottom:10px;font-size:1.05em}
+.big{font-size:1.25em;font-weight:600}
+.muted{color:var(--muted);font-size:.9em}
+.row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #e5eeee;font-size:.95em}
+.row:last-child{border:0}
+.pill{background:#dcfce7;color:var(--ok);border-radius:20px;padding:1px 10px;font-size:.78em;font-weight:600;margin-left:8px}
+h2{margin:44px 0 6px;color:var(--deep)}
+.sub{color:var(--muted);margin-bottom:18px}
+.sec{border-left:4px solid var(--teal)}
+.steps{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.step{background:var(--mint);color:var(--deep);padding:8px 16px;border-radius:20px;font-weight:600;font-size:.92em}
+.arrow{color:var(--teal);font-weight:700}
+footer{text-align:center;color:var(--muted);font-size:.85em;padding:26px 5% 34px}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--deep);color:#fff;padding:12px 22px;border-radius:10px;opacity:0;transition:.3s}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:640px){nav{display:none}.hero h1{font-size:1.8em}}
+</style>
 </head>
 <body>
-<h1>Patient Portal - DevSecOps demo</h1>
-<p>Scanned by Trivy before deployment. No real patient data.</p>
+<header>
+  <div class="brand">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="6" fill="#14b8a6"/><path d="M12 6v12M6 12h12" stroke="#042f2e" stroke-width="3" stroke-linecap="round"/></svg>
+    CareConnect
+  </div>
+  <nav><a href="#dashboard">Dashboard</a><a href="#security">Security</a><a href="#pipeline">Pipeline</a></nav>
+  <button class="btn" onclick="demo('Sign-in is disabled in this demo')">Sign in</button>
+</header>
+
+<section class="hero">
+  <h1>Your health, in one secure place</h1>
+  <p>Appointments, test results and prescriptions for patients, protected by a pipeline that checks every release for security problems before it goes live.</p>
+  <button class="btn" onclick="demo('Booking is disabled in this demo')">Book appointment</button>
+  <button class="btn ghost" onclick="demo('Results are sample data only')">View results</button>
+</section>
+
+<main>
+  <div id="dashboard" class="grid">
+    <div class="card">
+      <h3>Next appointment</h3>
+      <div class="big">Mon, 10:30 AM</div>
+      <p class="muted">Dr. A. Rao - Cardiology</p>
+      <p class="muted">Clinic Room 4, Level 2</p>
+    </div>
+    <div class="card">
+      <h3>Recent results</h3>
+      <div class="row"><span>Hemoglobin</span><span>13.8 g/dL<span class="pill">Normal</span></span></div>
+      <div class="row"><span>Cholesterol</span><span>182 mg/dL<span class="pill">Normal</span></span></div>
+      <div class="row"><span>Blood pressure</span><span>118/76<span class="pill">Normal</span></span></div>
+    </div>
+    <div class="card">
+      <h3>Prescriptions</h3>
+      <div class="row"><span>Vitamin D3</span><span class="muted">Once daily</span></div>
+      <div class="row"><span>Iron supplement</span><span class="muted">Once daily</span></div>
+    </div>
+  </div>
+  <p class="muted" style="margin-top:12px">Sample data for a fictional patient. No real patient information is stored or processed.</p>
+
+  <h2 id="security">Security built into every release</h2>
+  <p class="sub">Each control below is enforced by the pipeline or the cluster, not just described.</p>
+  <div class="grid">
+    <div class="card sec"><h3>Vulnerability gate</h3><p class="muted">Trivy scans every image. HIGH or CRITICAL findings stop the build before deployment.</p></div>
+    <div class="card sec"><h3>Non-root runtime</h3><p class="muted">The container runs as user 101, never as root.</p></div>
+    <div class="card sec"><h3>Read-only filesystem</h3><p class="muted">Files inside the running container cannot be modified.</p></div>
+    <div class="card sec"><h3>Secrets outside the code</h3><p class="muted">Credentials live in a Kubernetes Secret, not in the Git repository.</p></div>
+    <div class="card sec"><h3>Restricted network</h3><p class="muted">A network policy only accepts traffic from approved pods.</p></div>
+    <div class="card sec"><h3>No cluster credentials</h3><p class="muted">The pod receives no Kubernetes API token, limiting what an intruder could do.</p></div>
+  </div>
+
+  <h2 id="pipeline">Automated delivery</h2>
+  <p class="sub">This page was built and deployed by Jenkins, build <strong>#__BUILD__</strong>.</p>
+  <div class="card">
+    <div class="steps">
+      <span class="step">Commit to GitHub</span><span class="arrow">&rarr;</span>
+      <span class="step">Docker build</span><span class="arrow">&rarr;</span>
+      <span class="step">Trivy security scan</span><span class="arrow">&rarr;</span>
+      <span class="step">Deploy to Kubernetes</span>
+    </div>
+  </div>
+</main>
+
+<footer>Demo project by Aryan, SRM Institute of Science and Technology. Not a real medical service.</footer>
+<div id="toast"></div>
+<script>
+function demo(msg){var t=document.getElementById('toast');t.textContent=msg;t.className='show';setTimeout(function(){t.className='';},2200);}
+</script>
 </body>
 </html>
